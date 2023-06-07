@@ -1,0 +1,53 @@
+{
+	"id": "rv-annotation",
+	"name": "rv-annotation",
+	"description": "文件头部注释助手",
+	"displayName": "rv-annotation",
+	"version": "0.0.0",
+	"publisher": "rovinglight",
+	"engines": {
+		"HBuilderX": "^2.7.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"main": "./extension",
+	"activationEvents": [
+		"onCommand:extension.insertHeadAnnotation"
+	],
+	"contributes": {
+		"configuration": {
+			"title": "rv-annotation"
+		},
+		"commands": [
+			{
+				"command": "extension.insertHeadAnnotation",
+				"title": "首行注释信息"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"title": "添加文件头部注释",
+					"group": "assist",
+					"when": "editorTextFocus",
+					"command": "extension.insertHeadAnnotation"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "extension.insert",
+				"key": "Ctrl+Alt+I",
+				"when": "",
+				"macosx": "command+Ctrl+I"
+			}
+		]
+	},
+	"extensionDependencies": [
+		"plugin-manager"
+	],
+	"dependencies": {
+		"dayjs": "^1.11.8"
+	}
+}
