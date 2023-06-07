@@ -5,6 +5,7 @@
  */
 async function getMultiLines(editor, range) {
   if (range.end < range.start) throw new Error("getMultiLine failed");
+  if (range.start === 0 && range.end === 0) return [];
   const linesToSearch = Array(range.end - range.start + 1)
     .fill(range.start)
     .map((start, index) => start + index);

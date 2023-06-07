@@ -14,32 +14,42 @@ class FileHeadService {
    * 向文件头部插入描述注释
    */
   async insert() {
+    const editor = await hx.window.getActiveTextEditor();
+    const pattern = this.getPattern(editor.document.languageId);
+    // TODO: 添加配置项来决定是否进行如下判断，默认为 true
+    await this.checkIfAdded(editor);
+    const linesToInsert = [
+      pattern[0],
+      this.getAnnotationLine("Description"),
+      this.getAnnotationLine("Author"),
+      this.getAnnotationLine("Date"),
+      this.getAnnotationLine("LastEditors"),
+      this.getAnnotationLine("LastEditTime"),
+      pattern[1],
+      ""
+    ];
+    const textToInsert = linesToInsert.join("\n");
     try {
-      const editor = await hx.window.getActiveTextEditor();
-      const pattern = this.getPattern(editor.document.languageId);
-      // TODO: 添加配置项来决定是否进行如下判断，默认为 true
-      await this.checkIfAdded(editor);
-      const linesToInsert = [
-        pattern[0],
-        this.getAnnotationLine("Description"),
-        this.getAnnotationLine("Author"),
-        this.getAnnotationLine("Date"),
-        this.getAnnotationLine("LastEditors"),
-        this.getAnnotationLine("LastEditTime"),
-        pattern[1],
-		""
-      ];
       editor.edit(editBuilder => {
         editBuilder.replace(
           {
             start: 0,
             end: 0
           },
-          linesToInsert.join("\n")
+          textToInsert
         );
       });
     } catch (e) {
-      console.error(e);
+      /**
+       * TODO:
+       * 空文件下 HBuilder 提供的 api 无法插入文本，去社区反馈。
+       * 把弹窗放在 catch 中也是为了兼容后续版本 HBuilder 对这个问题的修复
+       */
+      if (editor.document.lineCount === 0) {
+        hx.window.showErrorMessage(
+          "空文件暂时无法插入注释，请加个回车再尝试添加。"
+        );
+      }
     }
   }
 
@@ -81,7 +91,12 @@ class FileHeadService {
    * 判断是否已经添加过头部注释了
    */
   async checkIfAdded(editor) {
-    const lines = await getMultiLines(editor, { start: 0, end: 2 });
+    const END_LINE = 2;
+    if (editor.document.lineCount === 0) return;
+    const lines = await getMultiLines(editor, {
+      start: 0,
+      end: Math.min(editor.document.lineCount - 1, END_LINE)
+    });
     /** 当前文件类型对应的注释类型 */
     const pattern = this.getPattern(editor.document.languageId);
     /** 是否已经添加过注释头了 */
