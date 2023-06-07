@@ -12,9 +12,7 @@
 		"Other"
 	],
 	"main": "./extension",
-	"activationEvents": [
-		"onCommand:extension.insertHeadAnnotation"
-	],
+	"activationEvents": ["*"],
 	"contributes": {
 		"configuration": {
 			"title": "rv-annotation",

@@ -22,7 +22,7 @@ class FileHeadService {
       this.getAnnotationLine("Description"),
       this.getAnnotationLine("Author"),
       this.getAnnotationLine("Date"),
-      this.getAnnotationLine("LastEditors"),
+      this.getAnnotationLine("LastEditor"),
       this.getAnnotationLine("LastEditTime"),
       pattern[1],
       ""
@@ -56,12 +56,7 @@ class FileHeadService {
    * 更新文件头部描述注释
    */
   async update() {
-    if (this.skipUpdateOnce) {
-      this.skipUpdateOnce = false;
-      return;
-    }
     try {
-      this.skipUpdateOnce = true;
       const editor = await hx.window.getActiveTextEditor();
       const END_LINE = 10;
       if (editor.document.lineCount < 3) return;
@@ -69,8 +64,37 @@ class FileHeadService {
         start: 0,
         end: Math.min(editor.document.lineCount - 1, END_LINE)
       });
-      const codeString = lines.join("\n");
-      console.log("here", lines, codeString);
+      let editorLine = null;
+      let editTimeLine = null;
+      lines.forEach(line => {
+        if (line.text.includes("@LastEditor")) {
+          editorLine = line;
+        } else if (line.text.includes("@LastEditTime")) {
+          editTimeLine = line;
+        }
+      });
+      console.log("editorLine", editorLine);
+      console.log("editTimeLine", editTimeLine);
+      editor.edit(editBuilder => {
+        if (editorLine) {
+          editBuilder.replace(
+            {
+              start: editorLine.start,
+              end: editorLine.end
+            },
+            this.getAnnotationLine("LastEditor")
+          );
+        }
+        if (editTimeLine) {
+          editBuilder.replace(
+            {
+              start: editTimeLine.start,
+              end: editTimeLine.end
+            },
+            this.getAnnotationLine("LastEditTime")
+          );
+        }
+      });
     } catch (e) {
       console.error(e);
     }
@@ -89,8 +113,8 @@ class FileHeadService {
         return ` * @Author: ${config.get("author")}`;
       case "Date":
         return ` * @Date: ${dayjs().format(DATE_FORMAT)}`;
-      case "LastEditors":
-        return ` * @LastEditors: ${config.get("author")}`;
+      case "LastEditor":
+        return ` * @LastEditor: ${config.get("author")}`;
       case "LastEditTime":
         return ` * @LastEditTime: ${dayjs().format(DATE_FORMAT)}`;
     }
