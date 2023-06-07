@@ -3,7 +3,6 @@ const dayjs = require("dayjs");
 const { getMultiLines } = require("../utils/editor");
 
 const DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
-const USER_NAME = "rovinglight";
 
 class FileHeadService {
   constructor() {
@@ -63,8 +62,17 @@ class FileHeadService {
     }
     try {
       this.skipUpdateOnce = true;
+      const editor = await hx.window.getActiveTextEditor();
+      const END_LINE = 10;
+      if (editor.document.lineCount < 3) return;
+      const lines = await getMultiLines(editor, {
+        start: 0,
+        end: Math.min(editor.document.lineCount - 1, END_LINE)
+      });
+      const codeString = lines.join("\n");
+      console.log("here", lines, codeString);
     } catch (e) {
-      //TODO handle the exception
+      console.error(e);
     }
   }
 
@@ -73,15 +81,16 @@ class FileHeadService {
    * @param {string} type
    */
   getAnnotationLine(type) {
+    const config = hx.workspace.getConfiguration();
     switch (type) {
       case "Description":
         return ` * @Description: `;
       case "Author":
-        return ` * @Author: ${USER_NAME}`;
+        return ` * @Author: ${config.get("author")}`;
       case "Date":
         return ` * @Date: ${dayjs().format(DATE_FORMAT)}`;
       case "LastEditors":
-        return ` * @LastEditors: ${USER_NAME}`;
+        return ` * @LastEditors: ${config.get("author")}`;
       case "LastEditTime":
         return ` * @LastEditTime: ${dayjs().format(DATE_FORMAT)}`;
     }

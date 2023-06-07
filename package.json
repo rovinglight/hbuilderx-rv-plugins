@@ -17,7 +17,14 @@
 	],
 	"contributes": {
 		"configuration": {
-			"title": "rv-annotation"
+			"title": "rv-annotation",
+      "properties": {
+				"author": {
+					"type": "string",
+					"default": "请到设置中配置「作者名」",
+					"description": "作者名（会出现在 Author 字段后）"
+				}			
+			}
 		},
 		"commands": [
 			{
