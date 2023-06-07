@@ -42,10 +42,10 @@
 		},
 		"keybindings": [
 			{
-				"command": "extension.insert",
-				"key": "Ctrl+Alt+I",
-				"when": "",
-				"macosx": "command+Ctrl+I"
+				"command": "extension.insertHeadAnnotation",
+				"key": "Ctrl+Shift+I",
+				"when": "editorTextFocus",
+				"macosx": "command+Shift+I"
 			}
 		]
 	},
