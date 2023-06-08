@@ -73,8 +73,6 @@ class FileHeadService {
           editTimeLine = line;
         }
       });
-      console.log("editorLine", editorLine);
-      console.log("editTimeLine", editTimeLine);
       editor.edit(editBuilder => {
         if (editorLine) {
           editBuilder.replace(
@@ -82,7 +80,9 @@ class FileHeadService {
               start: editorLine.start,
               end: editorLine.end
             },
-            this.getAnnotationLine("LastEditor")
+            this.getAnnotationLine("LastEditor", {
+              prefixSpaceCount: this.getSpaceCountFromStart(editorLine.text)
+            })
           );
         }
         if (editTimeLine) {
@@ -91,7 +91,9 @@ class FileHeadService {
               start: editTimeLine.start,
               end: editTimeLine.end
             },
-            this.getAnnotationLine("LastEditTime")
+            this.getAnnotationLine("LastEditTime", {
+              prefixSpaceCount: this.getSpaceCountFromStart(editTimeLine.text)
+            })
           );
         }
       });
@@ -103,20 +105,39 @@ class FileHeadService {
   /**
    * 根据类型返回对应的注释行字符串
    * @param {string} type
+   * @param {object} option
+   * @param {number} option.prefixSpaceCount 星号前的空格数
    */
-  getAnnotationLine(type) {
+  getAnnotationLine(type, option = {}) {
     const config = hx.workspace.getConfiguration();
+    let prefixSpaceString = " ";
+    if (typeof option.prefixSpaceCount === "number") {
+      prefixSpaceString = Array(option.prefixSpaceCount).fill(" ").join("");
+    }
     switch (type) {
       case "Description":
-        return ` * @Description: `;
+        return prefixSpaceString + `* @Description: `;
       case "Author":
-        return ` * @Author: ${config.get("author")}`;
+        return prefixSpaceString + `* @Author: ${config.get("author")}`;
       case "Date":
-        return ` * @Date: ${dayjs().format(DATE_FORMAT)}`;
+        return prefixSpaceString + `* @Date: ${dayjs().format(DATE_FORMAT)}`;
       case "LastEditor":
-        return ` * @LastEditor: ${config.get("author")}`;
+        return prefixSpaceString + `* @LastEditor: ${config.get("author")}`;
       case "LastEditTime":
-        return ` * @LastEditTime: ${dayjs().format(DATE_FORMAT)}`;
+        return (
+          prefixSpaceString + `* @LastEditTime: ${dayjs().format(DATE_FORMAT)}`
+        );
+    }
+  }
+
+  /** 获取一个字符串头部有多少个连续的空格 */
+  getSpaceCountFromStart(text) {
+    try {
+      const result = text.match(/^\s*/);
+      if (!result || !result[0]) return 0;
+      return result[0].length;
+    } catch (e) {
+      return 0;
     }
   }
 
@@ -148,7 +169,7 @@ class FileHeadService {
       case "html":
         return ["<!--", "-->"];
       default:
-        return ["/*", "*/"];
+        return ["/*", " */"];
     }
   }
 }
