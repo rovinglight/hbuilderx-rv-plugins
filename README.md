@@ -1,7 +1,36 @@
-﻿  
+﻿
 ## 说明
 
-这是一款供 HBuilderX 使用的头部注释插件。
+这是一款供 HBuilderX 使用的头部注释插件。支持插入并更新作者、创建时间、最后更新者、最后更新时间等字段。
+
+1. 兼容其他插件插入的或是之前自行添加的头部注释，扔可在保存时更新最后编辑者以及最后更新时间；
+2. 插件体积极小，安装包仅 5kb。
+
+### 举个例子
+
+`.vue` 或 `.html` 文件插入的头部注释会是这样：
+
+```html
+<!--
+ * @Description:
+ * @Author: rovinglight
+ * @Date: 2023-06-07 21:31:40
+ * @LastEditors: rovinglight
+ * @LastEditTime: 2023-06-07 21:31:40
+-->
+```
+
+其余文件的头部注释：
+
+```js
+/*
+ * @Description:
+ * @Author: rovinglight
+ * @Date: 2023-06-07 21:31:40
+ * @LastEditors: rovinglight
+ * @LastEditTime: 2023-06-07 21:31:40
+ */
+```
 
 ## 使用说明
 
