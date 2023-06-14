@@ -3,11 +3,11 @@ const dayjs = require("dayjs");
 const { getMultiLines } = require("../utils/editor");
 
 const DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
-
+/**
+ * 文件头部注释
+ */
 class FileHeadService {
-  constructor() {
-    this.skipUpdateOnce = false;
-  }
+  constructor() {}
 
   /**
    * 向文件头部插入描述注释
@@ -169,7 +169,7 @@ class FileHeadService {
       case "html":
         return ["<!--", "-->"];
       default:
-        return ["/*", " */"];
+        return ["/**", " */"];
     }
   }
 }

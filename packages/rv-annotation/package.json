@@ -1,9 +1,9 @@
 {
 	"id": "rv-annotation",
 	"name": "rv-annotation",
-	"description": "文件头部注释助手",
+	"description": "添加文件头部注释、函数注释",
 	"displayName": "rv-annotation",
-	"version": "0.1.1",
+	"version": "0.2.1",
 	"publisher": "rovinglight",
 	"type": "commonjs",
 	"scripts": {
@@ -34,6 +34,10 @@
 			{
 				"command": "extension.insertHeadAnnotation",
 				"title": "首行注释信息"
+			},
+			{
+				"command": "extension.insertFuncAnnotation",
+				"title": "添加函数注释"
 			}
 		],
 		"menus": {
@@ -43,6 +47,12 @@
 					"group": "assist",
 					"when": "editorTextFocus",
 					"command": "extension.insertHeadAnnotation"
+				},
+				{
+					"title": "添加函数注释",
+					"group": "assist",
+					"when": "editorTextFocus",
+					"command": "extension.insertFuncAnnotation"
 				}
 			]
 		},
@@ -52,6 +62,12 @@
 				"key": "Ctrl+Shift+I",
 				"when": "editorTextFocus",
 				"macosx": "command+Shift+I"
+			},
+			{
+				"command": "extension.insertFuncAnnotation",
+				"key": "Ctrl+Shift+U",
+				"when": "editorTextFocus",
+				"macosx": "command+Shift+U"
 			}
 		]
 	},
@@ -59,6 +75,7 @@
 		"plugin-manager"
 	],
 	"dependencies": {
+		"@babel/parser": "^7.22.5",
 		"dayjs": "^1.11.8"
 	},
 	"devDependencies": {
