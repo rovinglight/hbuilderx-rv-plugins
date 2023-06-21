@@ -11,7 +11,6 @@ class FuncService {
    * 插入函数注释
    */
   async insert() {
-    const LINES_TO_SEARCH = 10;
     const editor = await hx.window.getActiveTextEditor();
     const selectLine = await editor.document.lineFromPosition(
       editor.selection.active
@@ -44,7 +43,7 @@ class FuncService {
     return [
       "",
       indent + "/**",
-      indent + " *",
+      indent + " * @description: ",
       ...params.map(param =>
         this.getParamLine(
           param.name,
