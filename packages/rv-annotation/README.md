@@ -1,4 +1,4 @@
-﻿
+
 ## 说明
 
 这是一款供 HBuilderX 使用的注释插件。
@@ -48,7 +48,7 @@
  * @param {number} paramWithBoth
  * @param {*} paramPlain
  * @param {Number} paramNumber
- * @returns
+ * @return
  */
 const func = (
   paramWithDefault = {},
@@ -62,7 +62,7 @@ const func = (
  *
  * @param {String} param
  * @param {number} param2
- * @returns
+ * @return
  */
 function func(param = "default", param2: number) {}
 ```

@@ -3,7 +3,7 @@
 	"name": "rv-annotation",
 	"description": "添加文件头部注释、函数注释",
 	"displayName": "rv-annotation",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"publisher": "rovinglight",
 	"type": "commonjs",
 	"scripts": {

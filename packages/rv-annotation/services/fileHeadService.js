@@ -1,6 +1,6 @@
 const hx = require("hbuilderx");
 const dayjs = require("dayjs");
-const { getMultiLines } = require("../utils/editor");
+const { getMultiLines, getRangeOfText } = require("../utils/editor");
 
 const DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
 /**
@@ -30,7 +30,7 @@ class FileHeadService {
     const textToInsert = linesToInsert.join("\n");
     try {
       editor.edit(editBuilder => {
-        editBuilder.replace(
+		editBuilder.replace(
           {
             start: 0,
             end: 0
@@ -50,6 +50,14 @@ class FileHeadService {
         );
       }
     }
+	this.focusOnDescription();
+  }
+  
+  /** 将输入光标聚焦在 description 后 */
+  async focusOnDescription() {
+	  const editor = await hx.window.getActiveTextEditor();
+	  const range = await getRangeOfText(editor, "Description: ", {start: 0, end: 3});
+	  editor.setSelection(range.end, range.end);
   }
 
   /**

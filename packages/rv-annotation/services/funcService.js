@@ -1,5 +1,6 @@
 const hx = require("hbuilderx");
 const parser = require("@babel/parser");
+const { getRangeOfText } = require("../utils/editor");
 
 /**
  * 函数注释
@@ -37,6 +38,14 @@ class FuncService {
         annotationString
       );
     });
+	this.focusOnDescription(lineNumber);
+  }
+  
+  /** 将输入光标聚焦在 description 后 */
+  async focusOnDescription(startLine) {
+  	  const editor = await hx.window.getActiveTextEditor();
+  	  const range = await getRangeOfText(editor, "description: ", {start: startLine, end: startLine + 3});
+  	  editor.setSelection(range.end, range.end);
   }
 
   assembleAnnotationString(params, indent) {
@@ -51,7 +60,7 @@ class FuncService {
           indent
         )
       ),
-      indent + " * @returns",
+      indent + " * @return",
       indent + " */"
     ].join("\n");
   }
